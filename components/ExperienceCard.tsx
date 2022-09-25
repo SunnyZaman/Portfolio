@@ -5,9 +5,11 @@ type Props = {};
 
 function ExperienceCard({}: Props) {
   return (
-    <article className="flex flex-col rounded-lg items-center space-y-7 flex-shrink-0 
+    <article
+      className="flex flex-col rounded-lg items-center space-y-7 flex-shrink-0 
     w-[500px] md:w-[500px] xl:w-[900px] snap-center bg-[#ffffff] p-10 
-    hover:opacity-40 opacity-100 cursor-pointer transition-opacity duration-200 overflow-hidden">
+    hover:opacity-40 opacity-100 cursor-pointer transition-opacity duration-200 overflow-hidden"
+    >
       <motion.img
         initial={{
           y: -100,
@@ -15,7 +17,7 @@ function ExperienceCard({}: Props) {
         }}
         transition={{ duration: 1.2 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once:true }}
+        viewport={{ once: true }}
         className="w-32 h-32 rounded-full xl:w-[200px] xl:h-[200px] object-cover object-center"
         src="https://cdn.sanity.io/images/u7223sxg/production/c6c23e8c434cf24678da0d7b77b06f91aaa2aa88-500x750.jpg"
         alt=""
