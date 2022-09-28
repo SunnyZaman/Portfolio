@@ -61,14 +61,10 @@ const Home = ({
       <section id="skills" className="py-20 text-center">
         <h3 className="section-heading">Skills</h3>
         <h4 className="uppder tracking-[3px] text-gray-500 text-sm mt-7">
-          Some stuff I've learned along my software journey
+          Some stuff I&apos;ve learned along my software journey
         </h4>
         <Skills skills={skills} />
       </section>
-      {/* <section id="projects" className="snap-start">
-        <Projects />
-      </section> */}
-
       <section id="projects" className="py-20 text-center">
         <h3 className="section-heading">Projects</h3>
         <Projects projects={projects} />
