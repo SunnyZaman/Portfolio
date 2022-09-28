@@ -33,7 +33,7 @@ export const getApolloClient = () => {
     return {
       headers: {
         ...headers,
-        authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+        authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
       },
     };
   });
