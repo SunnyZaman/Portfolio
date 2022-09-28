@@ -1,3 +1,26 @@
+// import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+// import { setContext } from "@apollo/client/link/context";
+
+// export const getApolloClient = () => {
+//   const httpLink = createHttpLink({
+//     uri: "https://api.github.com/graphql",
+//   });
+
+//   const authLink = setContext((_, { headers }) => {
+//     return {
+//       headers: {
+//         ...headers,
+//         authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+//       },
+//     };
+//   });
+
+//   return new ApolloClient({
+//     link: authLink.concat(httpLink),
+//     cache: new InMemoryCache(),
+//   });
+// };
+
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
@@ -10,7 +33,7 @@ export const getApolloClient = () => {
     return {
       headers: {
         ...headers,
-        authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
+        authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
       },
     };
   });
