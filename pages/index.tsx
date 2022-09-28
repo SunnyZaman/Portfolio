@@ -18,6 +18,7 @@ import {
   InMemoryCache,
   createHttpLink,
   gql,
+  useQuery,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
@@ -27,7 +28,7 @@ type Props = {
   skills?: Skill[];
   projects: Project[];
   socials: Social[];
-  starredRepositories: any; //github repos
+  // starredRepositories: any; //github repos
 };
 const Home = ({
   pageInfo,
@@ -35,8 +36,35 @@ const Home = ({
   projects,
   skills,
   socials,
-  starredRepositories,
+  // starredRepositories,
 }: Props) => {
+  const query = gql`
+  {
+    user(login: "sunnyzaman") {
+      starredRepositories(first: 3) {
+        edges {
+          cursor
+          node {
+            id
+            name
+            description
+            languages(first: 5) {
+              nodes {
+                name
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+  const { data } = useQuery(query);
+  const { user } = data;
+  const starredRepositories = user.starredRepositories.edges.map(
+    ({ node }: any) => node
+  );
   return (
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
@@ -88,50 +116,50 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const socials: Social[] = await fetchSocials(hostname);
   const projects: Project[] = await fetchProjects(hostname);
 
-  const httpLink = createHttpLink({
-    uri: "https://api.github.com/graphql",
-  });
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-      },
-    };
-  });
-  const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
+  // const httpLink = createHttpLink({
+  //   uri: "https://api.github.com/graphql",
+  // });
+  // const authLink = setContext((_, { headers }) => {
+  //   return {
+  //     headers: {
+  //       ...headers,
+  //       authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+  //     },
+  //   };
+  // });
+  // const client = new ApolloClient({
+  //   link: authLink.concat(httpLink),
+  //   cache: new InMemoryCache(),
+  // });
 
-  const { data } = await client.query({
-    query: gql`
-      {
-        user(login: "sunnyzaman") {
-          starredRepositories(first: 3) {
-            edges {
-              cursor
-              node {
-                id
-                name
-                description
-                languages(first: 5) {
-                  nodes {
-                    name
-                    id
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
-  const { user } = data;
-  const starredRepositories = user.starredRepositories.edges.map(
-    ({ node }: any) => node
-  );
+  // const { data } = await client.query({
+  //   query: gql`
+  //     {
+  //       user(login: "sunnyzaman") {
+  //         starredRepositories(first: 3) {
+  //           edges {
+  //             cursor
+  //             node {
+  //               id
+  //               name
+  //               description
+  //               languages(first: 5) {
+  //                 nodes {
+  //                   name
+  //                   id
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `,
+  // });
+  // const { user } = data;
+  // const starredRepositories = user.starredRepositories.edges.map(
+  //   ({ node }: any) => node
+  // );
   return {
     props: {
       pageInfo,
@@ -139,7 +167,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
       skills,
       socials,
       projects,
-      starredRepositories,
+      // starredRepositories,
     },
     // revalidate:10
   };
