@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data  = await client.query({
+  const github  = await client.query({
     query: gql`
     {
       user(login: "sunnyzaman") {
@@ -32,5 +32,5 @@ export default async function handler(
     }
     `,
   });
-    res.status(200).json({ data })
+    res.status(200).json({ github })
 }
