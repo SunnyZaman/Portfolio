@@ -1,7 +1,7 @@
 import { Experience } from "../typings";
 
-export const fetchExperiences = async()=>{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getExperience`);
+export const fetchExperiences = async(hostname:string | undefined)=>{
+    const res = await fetch(`https://${hostname}/api/getExperience`);
     const data = await res.json();
     const experiences: Experience[] = data.experiences;
     return experiences;

@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import About from "../components/About";
@@ -80,12 +80,13 @@ const Home = ({
 
 export default Home;
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-  const pageInfo: PageInfo = await fetchPageInfo();
-  const experiences: Experience[] = await fetchExperiences();
-  const skills: Skill[] = await fetchSkills();
-  const socials: Social[] = await fetchSocials();
-  const projects: Project[] = await fetchProjects();
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const hostname = ctx.req.headers.host;
+  const pageInfo: PageInfo = await fetchPageInfo(hostname);
+  const experiences: Experience[] = await fetchExperiences(hostname);
+  const skills: Skill[] = await fetchSkills(hostname);
+  const socials: Social[] = await fetchSocials(hostname);
+  const projects: Project[] = await fetchProjects(hostname);
 
   const httpLink = createHttpLink({
     uri: "https://api.github.com/graphql",
