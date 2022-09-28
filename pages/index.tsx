@@ -89,6 +89,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const projects: Project[] = await fetchProjects(hostname);
 
   const httpLink = createHttpLink({
+    credentials: 'same-origin',
     uri: "https://api.github.com/graphql",
   });
   const authLink = setContext((_, { headers }) => {
@@ -100,6 +101,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     };
   });
   const client = new ApolloClient({
+    ssrMode: true,
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
@@ -130,9 +132,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   });
   const { user } = data;
   const starredRepositories = user.starredRepositories.edges.map(
-    ({ node }: any) => node
-  );
-  const languages = starredRepositories[1].languages.nodes.map(
     ({ node }: any) => node
   );
   return {
