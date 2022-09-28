@@ -3,7 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 
 export const getApolloClient = () => {
   const httpLink = createHttpLink({
-    uri: "https://api.github.com/graphql",
+    uri: "http://api.github.com/graphql/",
   });
 
   const authLink = setContext((_, { headers }) => {
