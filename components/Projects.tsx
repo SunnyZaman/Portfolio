@@ -48,6 +48,7 @@ function Projects({ projects }: Props) {
         <a
           href={`${githubURL}/${project.title}`}
           target="_blank"
+          rel="noreferrer"
           className="text-theme-gray-light hover:text-[#b17a06] text-xs mr-2 h-6 w-6"
         >
           <svg
@@ -64,6 +65,7 @@ function Projects({ projects }: Props) {
         <a
           href={project.linkToBuild}
           target="_blank"
+          rel="noreferrer"
           className="text-theme-gray-light hover:text-[#b17a06] text-xs h-6 w-6"
         >
           <svg

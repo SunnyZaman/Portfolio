@@ -36,6 +36,7 @@ function MoreProjects({ starredRepositories }: Props) {
                   <a
                     href={`${githubURL}/${repo.name}`}
                     target="_blank"
+                    rel="noreferrer"
                     className="hover:text-[#b17a06] text-xs mr-2 h-6 w-6"
                   >
                     <svg
@@ -70,6 +71,7 @@ function MoreProjects({ starredRepositories }: Props) {
         <a
           href="https://github.com/sunnyzaman"
           target="_blank"
+          rel="noreferrer"
           className="inline-block px-6 py-4 border rounded hover:text-[#b17a06] hover:border-[#b17a06]"
         >
           More projects
