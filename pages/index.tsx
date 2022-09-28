@@ -61,10 +61,10 @@ const Home = ({
   }
 `;
   const { data } = useQuery(query);
-  const { user } = data;
-  const starredRepositories = user.starredRepositories.edges.map(
-    ({ node }: any) => node
-  );
+  // const { user } = data;
+  // const starredRepositories = data?.user.starredRepositories.edges.map(
+  //   ({ node }: any) => node
+  // );
   return (
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
@@ -100,7 +100,7 @@ const Home = ({
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        <MoreProjects starredRepositories={starredRepositories} />
+        <MoreProjects data={data} />
       </section>
     </div>
   );
