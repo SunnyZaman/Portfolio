@@ -29,7 +29,7 @@ type Props = {
   skills?: Skill[];
   projects: Project[];
   socials: Social[];
-  starredRepositories: any; //github repos
+  starredRepositories?: any; //github repos
 };
 const Home = ({
   pageInfo,
