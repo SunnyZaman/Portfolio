@@ -1,23 +1,28 @@
 import Link from "next/link";
 import React from "react";
+import { urlFor } from "../sanity";
+import { PageInfo } from "../typings";
 import BackgroundCircles from "./BackgroundCircles";
 
-type Props = {};
+type Props = {
+  pageInfo?: PageInfo;
+};
 
-function Hero({}: Props) {
+function Hero({pageInfo}: Props) {
   return (
     <div className="h-screen flex flex-col space-r-8 items-center justify-center text-center overflow-hidden">
       <BackgroundCircles />
       <img
-        className="relative rounded-full h-32 w-32 mx-auto object-cover"
-        src="https://cdn.sanity.io/images/u7223sxg/production/c6c23e8c434cf24678da0d7b77b06f91aaa2aa88-500x750.jpg"
+        className="relative rounded-full h-32 w-32 mx-auto mb-4 object-cover"
+        src={urlFor(pageInfo?.heroImage).url()}
+        alt={`${pageInfo?.name}'s hero image`}
       />
       <div className="z-20">
         <h2 className="text-sm uppercase text-gray-500 pb-2 tracking-[15px]">
-          Software Engineer
+          {pageInfo?.role}
         </h2>
         <h1 className="text-5xl lg:text-6xl font-semibold px-10 uppercase">
-          Sunny Zaman
+          {pageInfo?.name}
         </h1>
         <div className="pt-5">
           <Link href="#about">

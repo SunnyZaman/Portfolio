@@ -10,6 +10,11 @@ export default {
       type: "string"
     },
     {
+      name: "fgColor",
+      title: "FgColor",
+      type: "string"
+    },
+    {
       name:"url",
       title:"Url",
       type: "url"
