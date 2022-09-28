@@ -22,9 +22,9 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
 type Props = {
-  pageInfo: PageInfo;
-  experiences: Experience[];
-  skills: Skill[];
+  pageInfo?: PageInfo;
+  experiences?: Experience[];
+  skills?: Skill[];
   projects: Project[];
   socials: Social[];
   starredRepositories: any; //github repos
@@ -41,10 +41,7 @@ const Home = ({
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
         <title>Sunny Zaman</title>
-        <meta
-          name="description"
-          content="Sunny Zaman's software developer portfolio"
-        />
+        <meta name="description" content="Sunny Zaman's software developer portfolio" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header socials={socials} />
@@ -83,7 +80,14 @@ const Home = ({
 
 export default Home;
 
-export const getStaticProps: GetStaticProps<any> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const hostname = ctx.req.headers.host;
+  const pageInfo: PageInfo = await fetchPageInfo(hostname);
+  const experiences: Experience[] = await fetchExperiences(hostname);
+  const skills: Skill[] = await fetchSkills(hostname);
+  const socials: Social[] = await fetchSocials(hostname);
+  const projects: Project[] = await fetchProjects(hostname);
+
   const httpLink = createHttpLink({
     uri: "https://api.github.com/graphql",
   });
@@ -130,26 +134,12 @@ export const getStaticProps: GetStaticProps<any> = async () => {
   );
   return {
     props: {
-      starredRepositories,
-    },
-  };
-};
-export const getServerSideProps: GetServerSideProps<any> = async (ctx) => {
-  const hostname = ctx.req.headers.host;
-  const pageInfo: PageInfo = await fetchPageInfo(hostname);
-  const experiences: Experience[] = await fetchExperiences(hostname);
-  const skills: Skill[] = await fetchSkills(hostname);
-  const socials: Social[] = await fetchSocials(hostname);
-  const projects: Project[] = await fetchProjects(hostname);
-
-  return {
-    props: {
       pageInfo,
       experiences,
       skills,
       socials,
       projects,
-      // starredRepositories,
+      starredRepositories,
     },
     // revalidate:10
   };
