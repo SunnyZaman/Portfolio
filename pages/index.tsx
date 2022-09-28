@@ -23,14 +23,13 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
 import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
-import { useEffect, useState } from "react";
 type Props = {
   pageInfo?: PageInfo;
   experiences?: Experience[];
   skills?: Skill[];
   projects: Project[];
   socials: Social[];
-  // starredRepositories?: any; //github repos
+  starredRepositories?: any; //github repos
 };
 const Home = ({
   pageInfo,
@@ -38,48 +37,13 @@ const Home = ({
   projects,
   skills,
   socials,
-}: // starredRepositories,
-Props) => {
-  const QUERY = gql`
-    {
-      user(login: "sunnyzaman") {
-        starredRepositories(first: 3) {
-          edges {
-            cursor
-            node {
-              id
-              name
-              description
-              languages(first: 5) {
-                nodes {
-                  name
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-  const [starredRepositories, setStarredRepositories] = useState();
-  const { data, loading, error } = useQuery(QUERY);
-  useEffect(() => {
-    if (data) {
-      setStarredRepositories(
-        data.user.starredRepositories.edges.map(({ node }: any) => node)
-      );
-    }
-  }, [data]);
-
+  starredRepositories,
+}: Props) => {
   return (
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
         <title>Sunny Zaman</title>
-        <meta
-          name="description"
-          content="Sunny Zaman's software developer portfolio"
-        />
+        <meta name="description" content="Sunny Zaman's software developer portfolio" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header socials={socials} />
@@ -125,7 +89,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const skills: Skill[] = await fetchSkills(hostname);
   const socials: Social[] = await fetchSocials(hostname);
   const projects: Project[] = await fetchProjects(hostname);
-  // const starredRepositories = await fetchGitHubRepos(hostname);
+  const starredRepositories = await fetchGitHubRepos(hostname);
   return {
     props: {
       pageInfo,
@@ -133,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
       skills,
       socials,
       projects,
-      // starredRepositories,
+      starredRepositories,
     },
     // revalidate:10
   };
