@@ -80,36 +80,37 @@ Props) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // const octokit = new Octokit({
-        //   auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-        // });
-        // const data:any = await octokit.graphql(
-        //   `
-        //   query { 
-        //   user(login: "sunnyzaman") {
-        //     starredRepositories(first: 3) {
-        //       edges {
-        //         cursor
-        //         node {
-        //           id
-        //           name
-        //           description
-        //           languages(first: 5) {
-        //             nodes {
-        //               name
-        //               id
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
-        // `
-        // );
+        const octokit = new Octokit({
+          auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+          
+        });
+        const data:any = await octokit.graphql(
+          `
+          query { 
+          user(login: "sunnyzaman") {
+            starredRepositories(first: 3) {
+              edges {
+                cursor
+                node {
+                  id
+                  name
+                  description
+                  languages(first: 5) {
+                    nodes {
+                      name
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        `
+        );
         // const res:any = await getRepos();
         // console.log("The res: ", data);
-        const starredRepos:any = [];
+        const starredRepos:any = data?.user?.starredRepositories?.edges;
         setRepos(starredRepos);
   
         setLoading(false);
