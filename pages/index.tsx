@@ -80,45 +80,54 @@ Props) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const octokit = new Octokit({
-          auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-        });
-        const data:any = await octokit.graphql(
-          `
-          query { viewer {
-          user(login: "sunnyzaman") {
-            starredRepositories(first: 3) {
-              edges {
-                cursor
-                node {
-                  id
-                  name
-                  description
-                  languages(first: 5) {
-                    nodes {
-                      name
-                      id
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-        `
-        );
+        const octokit = new Octokit();
+        //   const octokit = new Octokit({
+        //     auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+        //   });
+        //   const data:any = await octokit.graphql(
+        //     `
+        //     query { viewer {
+        //     user(login: "sunnyzaman") {
+        //       starredRepositories(first: 3) {
+        //         edges {
+        //           cursor
+        //           node {
+        //             id
+        //             name
+        //             description
+        //             languages(first: 5) {
+        //               nodes {
+        //                 name
+        //                 id
+        //               }
+        //             }
+        //           }
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
+        //   `
+        //   );
         // const res:any = await getRepos();
         // console.log("The res: ", data);
-        const starredRepos:any = data?.user?.starredRepositories?.edges;
-        setRepos(starredRepos);
-  
+        const response = await octokit.request("GET /search/issues", {
+          q: 'is:issue is:open',
+        });
+        const results = response.data.items.map((item: any) => ({
+          name: item.name,
+          owner: item.user.login,
+          url: item.html_url,
+        }));
+        // const starredRepos:any = data?.user?.starredRepositories?.edges;
+        console.log(results);
+
+        // setRepos(starredRepos);
+
         setLoading(false);
-        
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-      
     };
 
     // call the function
@@ -191,7 +200,7 @@ Props) => {
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        {loading ? "Loading..." :<MoreProjects starredRepositories={repos} /> }
+        {loading ? "Loading..." : <MoreProjects starredRepositories={repos} />}
 
         {/* <MoreProjects starredRepositories={starredRepositories} /> */}
       </section>
