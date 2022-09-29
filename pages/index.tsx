@@ -82,11 +82,10 @@ Props) => {
       try {
         const octokit = new Octokit({
           auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-          
         });
         const data:any = await octokit.graphql(
           `
-          query { 
+          query { viewer {
           user(login: "sunnyzaman") {
             starredRepositories(first: 3) {
               edges {
@@ -106,6 +105,7 @@ Props) => {
             }
           }
         }
+      }
         `
         );
         // const res:any = await getRepos();
@@ -191,9 +191,7 @@ Props) => {
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        <>
-        { loading ? <p>Loading...</p> :<MoreProjects starredRepositories={repos} /> }
-        </>
+        {loading ? "Loading..." :<MoreProjects starredRepositories={repos} /> }
 
         {/* <MoreProjects starredRepositories={starredRepositories} /> */}
       </section>
