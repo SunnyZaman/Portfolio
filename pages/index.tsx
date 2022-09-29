@@ -108,7 +108,7 @@ Props) => {
       );
       // const res:any = await getRepos();
       console.log("The res: ", data);
-      const starredRepos:any = data.user.starredRepositories.edges;
+      const starredRepos:any = data?.user?.starredRepositories?.edges;
       setRepos(starredRepos);
 
       setLoading(false);
