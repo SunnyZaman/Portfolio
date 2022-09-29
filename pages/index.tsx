@@ -82,7 +82,7 @@ Props) => {
     const fetchData = async () => {
       setLoading(true);
 
-      const { user } = await octokit.graphql(
+      const { user }:any = await octokit.graphql(
         `
       {
         user(login: "sunnyzaman") {
