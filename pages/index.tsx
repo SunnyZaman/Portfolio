@@ -23,6 +23,8 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
 import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
+import { useEffect, useState } from "react";
+import { Octokit } from "octokit";
 type Props = {
   pageInfo?: PageInfo;
   experiences?: Experience[];
@@ -31,19 +33,126 @@ type Props = {
   socials: Social[];
   starredRepositories?: any; //github repos
 };
+const octokit = new Octokit({
+  auth: process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN,
+});
 const Home = ({
   pageInfo,
   experiences,
   projects,
   skills,
   socials,
-  starredRepositories,
-}: Props) => {
+}: // starredRepositories,
+Props) => {
+  const [starredRepositories, setStarredRepositories] = useState([]);
+
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const QUERY = `
+{
+  user(login: "sunnyzaman") {
+    starredRepositories(first: 3) {
+      edges {
+        cursor
+        node {
+          id
+          name
+          description
+          languages(first: 5) {
+            nodes {
+              name
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+  // const loadRepos = async () => {
+  //   setLoading(true);
+  //   const res = await getRepos();
+  //   setLoading(false);
+  //   setRepos(res.data.items);
+  // };
+
+  useEffect(() => {
+    // declare the data fetching function
+    const fetchData = async () => {
+      setLoading(true);
+
+      const { user } = await octokit.graphql(
+        `
+      {
+        user(login: "sunnyzaman") {
+          starredRepositories(first: 3) {
+            edges {
+              cursor
+              node {
+                id
+                name
+                description
+                languages(first: 5) {
+                  nodes {
+                    name
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      `
+      );
+      // const res:any = await getRepos();
+      console.log("The res: ", user);
+      setRepos(user.starredRepositories.edges.map(({ node }: any) => node));
+
+      setLoading(false);
+    };
+
+    // call the function
+    fetchData()
+      // make sure to catch any error
+      .catch(console.error);
+  }, []);
+
+  // useEffect(() => {
+  //   const axiosConfig:any = {
+  //     baseURL: 'https://api.github.com/',
+  //     auth: {
+  //       username: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+  //       password: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET
+  //     }
+  //   };
+  //  const data = await axios.get(
+  //     `search/repositories?sort=stars&order=desc`,
+  //     axiosConfig
+  //   );
+  //   // const token = 'my github token'
+
+  //   // fetch('https://api.github.com/graphql', {
+  //   //   method: 'GET',
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //     'Authorization': 'bearer ' + process.env.GITHUB_ACCESS_TOKEN
+  //   //   },
+  //   //   body: JSON.stringify({ query: QUERY })
+  //   // })
+  //   //   .then(res => res.json())
+  //   //   .then(data => console.log(data))
+  // }, [])
+
   return (
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
         <title>Sunny Zaman</title>
-        <meta name="description" content="Sunny Zaman's software developer portfolio" />
+        <meta
+          name="description"
+          content="Sunny Zaman's software developer portfolio"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header socials={socials} />
@@ -74,7 +183,9 @@ const Home = ({
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        <MoreProjects starredRepositories={starredRepositories} />
+        {loading ? "Loading..." :<MoreProjects starredRepositories={repos} /> }
+
+        {/* <MoreProjects starredRepositories={starredRepositories} /> */}
       </section>
     </div>
   );
@@ -89,7 +200,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const skills: Skill[] = await fetchSkills(hostname);
   const socials: Social[] = await fetchSocials(hostname);
   const projects: Project[] = await fetchProjects(hostname);
-  const starredRepositories = await fetchGitHubRepos(hostname);
+  // const starredRepositories = await fetchGitHubRepos(hostname);
   return {
     props: {
       pageInfo,
@@ -97,7 +208,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
       skills,
       socials,
       projects,
-      starredRepositories,
+      // starredRepositories,
     },
     // revalidate:10
   };
