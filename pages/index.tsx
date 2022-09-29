@@ -43,7 +43,9 @@ const Home = ({
 }: // starredRepositories,
 Props) => {
   const [starredRepositories, setStarredRepositories] = useState([]);
-  const octokit = new Octokit();
+  const octokit = new Octokit({
+    auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+  });
   const [repos, setRepos] = useState<any>();
   const [loading, setLoading] = useState(false);
   const QUERY = `
