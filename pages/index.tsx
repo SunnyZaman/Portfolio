@@ -191,7 +191,9 @@ Props) => {
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        {loading ? "Loading..." :<MoreProjects starredRepositories={repos} /> }
+        <>
+        { loading ? <p>Loading...</p> :<MoreProjects starredRepositories={repos} /> }
+        </>
 
         {/* <MoreProjects starredRepositories={starredRepositories} /> */}
       </section>
