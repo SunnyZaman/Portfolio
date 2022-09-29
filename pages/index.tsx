@@ -85,7 +85,7 @@ Props) => {
         });
         const data:any = await octokit.graphql(
           `
-        {
+          query { viewer {
           user(login: "sunnyzaman") {
             starredRepositories(first: 3) {
               edges {
@@ -105,14 +105,15 @@ Props) => {
             }
           }
         }
+      }
         `
         );
         // const res:any = await getRepos();
-        console.log("The res: ", data);
+        // console.log("The res: ", data);
         const starredRepos:any = data?.user?.starredRepositories?.edges;
-        setRepos(starredRepos);
+        // setRepos(starredRepos);
   
-        setLoading(false);
+        // setLoading(false);
         
       } catch (error) {
         console.error(error)
