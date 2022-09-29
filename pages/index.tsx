@@ -46,7 +46,7 @@ const Home = ({
 Props) => {
   const [starredRepositories, setStarredRepositories] = useState([]);
 
-  const [repos, setRepos] = useState([]);
+  const [repos, setRepos] = useState<any>();
   const [loading, setLoading] = useState(false);
   const QUERY = `
 {
@@ -82,7 +82,7 @@ Props) => {
     const fetchData = async () => {
       setLoading(true);
 
-      const { user }:any = await octokit.graphql(
+      const data:any = await octokit.graphql(
         `
       {
         user(login: "sunnyzaman") {
@@ -107,8 +107,9 @@ Props) => {
       `
       );
       // const res:any = await getRepos();
-      console.log("The res: ", user);
-      setRepos(user.starredRepositories.edges.map(({ node }: any) => node));
+      console.log("The res: ", data);
+      const starredRepos:any = data.user.starredRepositories.edges.map(({ node }: any) => node);
+      setRepos(starredRepos);
 
       setLoading(false);
     };
