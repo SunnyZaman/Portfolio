@@ -43,9 +43,7 @@ const Home = ({
 }: // starredRepositories,
 Props) => {
   const [starredRepositories, setStarredRepositories] = useState([]);
-  const octokit = new Octokit({
-    auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-  });
+
   const [repos, setRepos] = useState<any>();
   const [loading, setLoading] = useState(false);
   const QUERY = `
@@ -81,37 +79,45 @@ Props) => {
     // declare the data fetching function
     const fetchData = async () => {
       setLoading(true);
-
-      const data:any = await octokit.graphql(
-        `
-      {
-        user(login: "sunnyzaman") {
-          starredRepositories(first: 3) {
-            edges {
-              cursor
-              node {
-                id
-                name
-                description
-                languages(first: 5) {
-                  nodes {
-                    name
-                    id
+      try {
+        const octokit = new Octokit({
+          auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+        });
+        const data:any = await octokit.graphql(
+          `
+        {
+          user(login: "sunnyzaman") {
+            starredRepositories(first: 3) {
+              edges {
+                cursor
+                node {
+                  id
+                  name
+                  description
+                  languages(first: 5) {
+                    nodes {
+                      name
+                      id
+                    }
                   }
                 }
               }
             }
           }
         }
+        `
+        );
+        // const res:any = await getRepos();
+        console.log("The res: ", data);
+        const starredRepos:any = data?.user?.starredRepositories?.edges;
+        setRepos(starredRepos);
+  
+        setLoading(false);
+        
+      } catch (error) {
+        console.error(error)
       }
-      `
-      );
-      // const res:any = await getRepos();
-      console.log("The res: ", data);
-      const starredRepos:any = data?.user?.starredRepositories?.edges;
-      setRepos(starredRepos);
-
-      setLoading(false);
+      
     };
 
     // call the function
