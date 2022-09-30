@@ -24,7 +24,7 @@ type Props = {
 };
 
 const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
-  const [repos, setRepos] = useState<any>();
+  const [repos, setRepos] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
