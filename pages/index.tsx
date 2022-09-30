@@ -82,7 +82,7 @@ Props) => {
       try {
         // const octokit = new Octokit();
           const octokit = new Octokit({
-            auth: `token ${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+            auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
           });
          octokit.graphql(
             `
