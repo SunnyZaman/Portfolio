@@ -84,39 +84,51 @@ Props) => {
         //   const octokit = new Octokit({
         //     auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
         //   });
-        //   const data:any = await octokit.graphql(
-        //     `
-        //     query { viewer {
-        //     user(login: "sunnyzaman") {
-        //       starredRepositories(first: 3) {
-        //         edges {
-        //           cursor
-        //           node {
-        //             id
-        //             name
-        //             description
-        //             languages(first: 5) {
-        //               nodes {
-        //                 name
-        //                 id
-        //               }
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
-        //   `
-        //   );
+         octokit.graphql(
+            `
+            query { viewer {
+            user(login: "sunnyzaman") {
+              starredRepositories(first: 3) {
+                edges {
+                  cursor
+                  node {
+                    id
+                    name
+                    description
+                    languages(first: 5) {
+                      nodes {
+                        name
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+          `
+          )
+          .then(({ data }:any) => {
+            // handle data
+            console.log(data);
+            
+          });
         // const res:any = await getRepos();
         // console.log("The res: ", data);
 
-        octokit.rest.repos
-  .listForOrg({
-    org: "octokit",
-    type: "public",
-  })
+  //       octokit.rest.repos
+  // .listForOrg({
+  //   org: "octokit",
+  //   type: "public",
+  // })
+  // .then(({ data }) => {
+  //   // handle data
+  //   console.log(data);
+    
+  // });
+
+  octokit.request("GET /users/SunnyZaman/repos")
   .then(({ data }) => {
     // handle data
     console.log(data);
