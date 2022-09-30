@@ -109,8 +109,11 @@ Props) => {
           )
           .then((data:any) => {
             // handle data
-            console.log(data);
-            
+            const repos = data.user.starredRepositories.edges.map(({ node }: any) => node);
+            console.log(repos);
+            setRepos(repos);
+
+            setLoading(false);
           });
         // const res:any = await getRepos();
         // console.log("The res: ", data);
