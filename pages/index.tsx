@@ -48,7 +48,7 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
           .graphql(
             `{
             user(login: "sunnyzaman") {
-              starredRepositories(first: 3) {
+              pinnedItems(first: 3) {
                 edges {
                   cursor
                   node {
