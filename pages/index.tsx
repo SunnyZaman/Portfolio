@@ -25,6 +25,7 @@ import MoreProjects from "../components/MoreProjects";
 import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
 import { useEffect, useState } from "react";
 import { Octokit } from "@octokit/rest";
+import { getApolloClient } from "../services/getApolloClient";
 type Props = {
   pageInfo?: PageInfo;
   experiences?: Experience[];
@@ -42,32 +43,32 @@ const Home = ({
   socials,
 }: // starredRepositories,
 Props) => {
-  const [starredRepositories, setStarredRepositories] = useState([]);
+  // const [starredRepositories, setStarredRepositories] = useState([]);
 
   const [repos, setRepos] = useState<any>();
   const [loading, setLoading] = useState(false);
-  const QUERY = `
-{
-  user(login: "sunnyzaman") {
-    starredRepositories(first: 3) {
-      edges {
-        cursor
-        node {
-          id
-          name
-          description
-          languages(first: 5) {
-            nodes {
-              name
-              id
-            }
-          }
-        }
-      }
-    }
-  }
-}
-`;
+  //   const QUERY = `
+  // {
+  //   user(login: "sunnyzaman") {
+  //     starredRepositories(first: 3) {
+  //       edges {
+  //         cursor
+  //         node {
+  //           id
+  //           name
+  //           description
+  //           languages(first: 5) {
+  //             nodes {
+  //               name
+  //               id
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // `;
   // const loadRepos = async () => {
   //   setLoading(true);
   //   const res = await getRepos();
@@ -79,62 +80,105 @@ Props) => {
     // declare the data fetching function
     const fetchData = async () => {
       setLoading(true);
+      const client = getApolloClient();
+
       try {
-        // const octokit = new Octokit();
-          const octokit = new Octokit({
-            auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-          });
-         octokit.graphql(
-            `{
-            user(login: "sunnyzaman") {
-              starredRepositories(first: 3) {
-                edges {
-                  cursor
-                  node {
-                    id
-                    name
-                    description
-                    languages(first: 5) {
-                      nodes {
-                        name
+        client
+          .query({
+            query: gql`
+              {
+                user(login: "sunnyzaman") {
+                  starredRepositories(first: 3) {
+                    edges {
+                      cursor
+                      node {
                         id
+                        name
+                        description
+                        languages(first: 5) {
+                          nodes {
+                            name
+                            id
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
-            }
-          }
-          `
-          )
-          .then((data:any) => {
+            `,
+          })
+          .then((data: any) => {
             // handle data
-            const repos = data.user.starredRepositories.edges.map(({ node }: any) => node);
-            console.log(repos);
+            const repos = data.user.starredRepositories.edges.map(
+              ({ node }: any) => node
+            );
+            // console.log(repos);
             setRepos(repos);
-
             setLoading(false);
           });
+      } catch (e: any) {
+        console.error(e.message);
+      }
+      // try {
+      //   // const octokit = new Octokit();
+      //   const octokit = new Octokit({
+      //     auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+      //   });
+      //   octokit
+      //     .graphql(
+      //       `{
+      //       user(login: "sunnyzaman") {
+      //         starredRepositories(first: 3) {
+      //           edges {
+      //             cursor
+      //             node {
+      //               id
+      //               name
+      //               description
+      //               languages(first: 5) {
+      //                 nodes {
+      //                   name
+      //                   id
+      //                 }
+      //               }
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //     `
+      //     )
+      //     .then((data: any) => {
+      //       // handle data
+      //       const repos = data.user.starredRepositories.edges.map(
+      //         ({ node }: any) => node
+      //       );
+      //       console.log(repos);
+      //       setRepos(repos);
+
+      //       setLoading(false);
+      //     });
         // const res:any = await getRepos();
         // console.log("The res: ", data);
 
-  //       octokit.rest.repos
-  // .listForOrg({
-  //   org: "octokit",
-  //   type: "public",
-  // })
-  // .then(({ data }) => {
-  //   // handle data
-  //   console.log(data);
-    
-  // });
+        //       octokit.rest.repos
+        // .listForOrg({
+        //   org: "octokit",
+        //   type: "public",
+        // })
+        // .then(({ data }) => {
+        //   // handle data
+        //   console.log(data);
 
-  octokit.request("GET /users/SunnyZaman/repos")
-  .then(({ data }) => {
-    // handle data
-    console.log(data);
-    
-  });
+        // });
+
+        // octokit.request("GET /users/SunnyZaman/repos")
+        // .then(({ data }) => {
+        //   // handle data
+        //   console.log(data);
+
+        // });
         // const response = await octokit.request("GET /search/issues", {
         //   q: 'is:issue is:open',
         // });
@@ -148,10 +192,10 @@ Props) => {
 
         // setRepos(starredRepos);
 
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
+        // setLoading(false);
+      // } catch (error) {
+      //   console.error(error);
+      // }
     };
 
     // call the function
@@ -241,7 +285,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const skills: Skill[] = await fetchSkills(hostname);
   const socials: Social[] = await fetchSocials(hostname);
   const projects: Project[] = await fetchProjects(hostname);
-  // const starredRepositories = await fetchGitHubRepos(hostname);
+  // handle data
   return {
     props: {
       pageInfo,
