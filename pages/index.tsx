@@ -85,8 +85,7 @@ Props) => {
             auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
           });
          octokit.graphql(
-            `
-            query { viewer {
+            `{
             user(login: "sunnyzaman") {
               starredRepositories(first: 3) {
                 edges {
@@ -106,7 +105,6 @@ Props) => {
               }
             }
           }
-        }
           `
           )
           .then(({ data }:any) => {
