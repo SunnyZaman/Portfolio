@@ -107,7 +107,7 @@ Props) => {
           }
           `
           )
-          .then(({ data }:any) => {
+          .then((data:any) => {
             // handle data
             console.log(data);
             
