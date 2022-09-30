@@ -1,6 +1,5 @@
 import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import About from "../components/About";
 import WorkExperience from "../components/WorkExperience";
 import Header from "../components/Header";
@@ -13,14 +12,14 @@ import { fetchExperiences } from "../utils/fetchExperiences";
 import { fetchSkills } from "../utils/fetchSkills";
 import { fetchProjects } from "../utils/fetchProjects";
 import { fetchSocials } from "../utils/fetchSocials";
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-  gql,
-  useQuery,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+// import {
+//   ApolloClient,
+//   InMemoryCache,
+//   createHttpLink,
+//   gql,
+//   useQuery,
+// } from "@apollo/client";
+// import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
 import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
 import { useEffect, useState } from "react";
@@ -32,204 +31,58 @@ type Props = {
   skills?: Skill[];
   projects: Project[];
   socials: Social[];
-  starredRepositories?: any; //github repos
 };
 
-const Home = ({
-  pageInfo,
-  experiences,
-  projects,
-  skills,
-  socials,
-}: // starredRepositories,
-Props) => {
-  // const [starredRepositories, setStarredRepositories] = useState([]);
-
+const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
   const [repos, setRepos] = useState<any>();
   const [loading, setLoading] = useState(false);
-  //   const QUERY = `
-  // {
-  //   user(login: "sunnyzaman") {
-  //     starredRepositories(first: 3) {
-  //       edges {
-  //         cursor
-  //         node {
-  //           id
-  //           name
-  //           description
-  //           languages(first: 5) {
-  //             nodes {
-  //               name
-  //               id
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // `;
-  // const loadRepos = async () => {
-  //   setLoading(true);
-  //   const res = await getRepos();
-  //   setLoading(false);
-  //   setRepos(res.data.items);
-  // };
 
   useEffect(() => {
-    // declare the data fetching function
     const fetchData = async () => {
       setLoading(true);
-      const client = getApolloClient();
-
       try {
-        client
-          .query({
-            query: gql`
-              {
-                user(login: "sunnyzaman") {
-                  starredRepositories(first: 3) {
-                    edges {
-                      cursor
-                      node {
-                        id
+        const octokit = new Octokit({
+          auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+        });
+        octokit
+          .graphql(
+            `{
+            user(login: "sunnyzaman") {
+              starredRepositories(first: 3) {
+                edges {
+                  cursor
+                  node {
+                    id
+                    name
+                    description
+                    languages(first: 5) {
+                      nodes {
                         name
-                        description
-                        languages(first: 5) {
-                          nodes {
-                            name
-                            id
-                          }
-                        }
+                        id
                       }
                     }
                   }
                 }
               }
-            `,
-          })
+            }
+          }
+          `
+          )
           .then((data: any) => {
             // handle data
             const repos = data.user.starredRepositories.edges.map(
               ({ node }: any) => node
             );
-            // console.log(repos);
+            console.log(repos);
             setRepos(repos);
             setLoading(false);
           });
-      } catch (e: any) {
-        console.error(e.message);
+      } catch (error) {
+        console.error(error);
       }
-      // try {
-      //   // const octokit = new Octokit();
-      //   const octokit = new Octokit({
-      //     auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-      //   });
-      //   octokit
-      //     .graphql(
-      //       `{
-      //       user(login: "sunnyzaman") {
-      //         starredRepositories(first: 3) {
-      //           edges {
-      //             cursor
-      //             node {
-      //               id
-      //               name
-      //               description
-      //               languages(first: 5) {
-      //                 nodes {
-      //                   name
-      //                   id
-      //                 }
-      //               }
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //     `
-      //     )
-      //     .then((data: any) => {
-      //       // handle data
-      //       const repos = data.user.starredRepositories.edges.map(
-      //         ({ node }: any) => node
-      //       );
-      //       console.log(repos);
-      //       setRepos(repos);
-
-      //       setLoading(false);
-      //     });
-        // const res:any = await getRepos();
-        // console.log("The res: ", data);
-
-        //       octokit.rest.repos
-        // .listForOrg({
-        //   org: "octokit",
-        //   type: "public",
-        // })
-        // .then(({ data }) => {
-        //   // handle data
-        //   console.log(data);
-
-        // });
-
-        // octokit.request("GET /users/SunnyZaman/repos")
-        // .then(({ data }) => {
-        //   // handle data
-        //   console.log(data);
-
-        // });
-        // const response = await octokit.request("GET /search/issues", {
-        //   q: 'is:issue is:open',
-        // });
-        // const results = response.data.items.map((item: any) => ({
-        //   name: item.name,
-        //   owner: item.user.login,
-        //   url: item.html_url,
-        // }));
-        // // const starredRepos:any = data?.user?.starredRepositories?.edges;
-        // console.log(results);
-
-        // setRepos(starredRepos);
-
-        // setLoading(false);
-      // } catch (error) {
-      //   console.error(error);
-      // }
     };
-
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
+    fetchData().catch(console.error);
   }, []);
-
-  // useEffect(() => {
-  //   const axiosConfig:any = {
-  //     baseURL: 'https://api.github.com/',
-  //     auth: {
-  //       username: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
-  //       password: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET
-  //     }
-  //   };
-  //  const data = await axios.get(
-  //     `search/repositories?sort=stars&order=desc`,
-  //     axiosConfig
-  //   );
-  //   // const token = 'my github token'
-
-  //   // fetch('https://api.github.com/graphql', {
-  //   //   method: 'GET',
-  //   //   headers: {
-  //   //     'Content-Type': 'application/json',
-  //   //     'Authorization': 'bearer ' + process.env.GITHUB_ACCESS_TOKEN
-  //   //   },
-  //   //   body: JSON.stringify({ query: QUERY })
-  //   // })
-  //   //   .then(res => res.json())
-  //   //   .then(data => console.log(data))
-  // }, [])
-
   return (
     <div className="bg-[#f4f4f4] text-black h-screen overflow-y-scroll z-0">
       <Head>
@@ -269,8 +122,6 @@ Props) => {
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
         {loading ? "Loading..." : <MoreProjects starredRepositories={repos} />}
-
-        {/* <MoreProjects starredRepositories={starredRepositories} /> */}
       </section>
     </div>
   );
@@ -293,7 +144,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
       skills,
       socials,
       projects,
-      // starredRepositories,
     },
     // revalidate:10
   };
