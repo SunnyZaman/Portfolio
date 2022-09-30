@@ -70,11 +70,11 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
           )
           .then((data: any) => {
             // handle data
-            const repos = data.user.starredRepositories.edges.map(
-              ({ node }: any) => node
-            );
-            console.log(repos);
-            setRepos(repos);
+            // const repos = data.user.starredRepositories.edges.map(
+            //   ({ node }: any) => node
+            // );
+            console.log(data);
+            setRepos([]);
             setLoading(false);
           });
       } catch (error) {
