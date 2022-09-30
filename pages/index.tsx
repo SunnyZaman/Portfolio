@@ -80,10 +80,10 @@ Props) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const octokit = new Octokit();
-        //   const octokit = new Octokit({
-        //     auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
-        //   });
+        // const octokit = new Octokit();
+          const octokit = new Octokit({
+            auth: `${process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN}`,
+          });
          octokit.graphql(
             `
             query { viewer {
