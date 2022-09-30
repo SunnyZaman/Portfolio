@@ -130,7 +130,7 @@ function Projects({ projects }: Props) {
             </motion.div>
           </div>
         ) : (
-          <div className="project-card">
+          <div className="project-card" key={`${index}-${project._id}`}>
             <motion.div
               initial={{
                 x: -200,

@@ -58,7 +58,10 @@ function MoreProjects({ pinnedItems }: Props) {
               </div>
               <div className="flex justify-start">
                 {repo.languages.nodes.map((language: any) => (
-                  <span key={language.id} className="text-gray-700 text-xs mr-2">
+                  <span
+                    key={language.id}
+                    className="text-gray-700 text-xs mr-2"
+                  >
                     {language.name}
                   </span>
                 ))}

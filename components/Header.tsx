@@ -60,7 +60,8 @@ export default function Header({ socials }: Props) {
           network="email"
           fgColor="#e4aa12"
           bgColor="transparent"
-          onClick={()=>window.location.assign("mailto:sunnyzaman@live.com")}/>
+          onClick={() => window.location.assign("mailto:sunnyzaman@live.com")}
+        />
       </motion.div>
     </header>
   );

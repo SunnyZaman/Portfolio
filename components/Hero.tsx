@@ -8,7 +8,7 @@ type Props = {
   pageInfo?: PageInfo;
 };
 
-function Hero({pageInfo}: Props) {
+function Hero({ pageInfo }: Props) {
   return (
     <div className="h-screen flex flex-col space-r-8 items-center justify-center text-center overflow-hidden">
       <BackgroundCircles />

@@ -7,7 +7,7 @@ type Props = {
   skills?: SkillType[];
 };
 
-function Skills({skills}: Props) {
+function Skills({ skills }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -15,19 +15,13 @@ function Skills({skills}: Props) {
       transition={{ duration: 1.5 }}
       className="flex flex-col md:text-left xl:flex-row max-w-[2000px] xl:px-10 justify-center xl:space-y-0 mx-auto items-center mt-8"
     >
-      {/*       className="flex relative flex-col text-center md:text-left xl:flex-row max-w-[2000px] xl:px-10 min-h-screen justify-center xl:space-y-0 mx-auto items-center"
- */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-        {
-          skills?.slice(0, skills.length /2).map(skill=>(
-            <Skill key={skill._id} skill={skill}/>
-          ))
-        }
-         {
-          skills?.slice(skills.length /2, skills.length).map(skill=>(
-            <Skill key={skill._id} skill={skill} directionLeft/>
-          ))
-        }
+        {skills?.slice(0, skills.length / 2).map((skill) => (
+          <Skill key={skill._id} skill={skill} />
+        ))}
+        {skills?.slice(skills.length / 2, skills.length).map((skill) => (
+          <Skill key={skill._id} skill={skill} directionLeft />
+        ))}
       </div>
     </motion.div>
   );
