@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import React from "react";
 
 type Props = {
-  starredRepositories: any;
+  pinnedItems: any;
 };
 const githubURL = "https://github.com/sunnyzaman";
 
-function MoreProjects({ starredRepositories }: Props) {
+function MoreProjects({ pinnedItems }: Props) {
   return (
     <motion.div
       initial={{
@@ -17,7 +17,7 @@ function MoreProjects({ starredRepositories }: Props) {
       className="max-w-5xl mt-8 mx-auto px-6 lg:px-0"
     >
       <div className="flex flex-wrap mb-20">
-        {starredRepositories?.map((repo: any) => (
+        {pinnedItems?.map((repo: any) => (
           <div key={repo.id} className="p-2 w-full md:w-1/2 lg:w-1/3">
             <div className="bg-white rounded shadow-lg p-6 md:h-[310px]">
               <div className="flex justify-between items-center mb-6">

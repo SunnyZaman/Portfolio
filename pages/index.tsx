@@ -71,11 +71,11 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
           )
           .then((data: any) => {
             // handle data
-            // const repos = data.user.starredRepositories.edges.map(
-            //   ({ node }: any) => node
-            // );
-            console.log(data);
-            setRepos([]);
+            const repos = data.user.pinnedItems.edges.map(
+              ({ node }: any) => node
+            );
+            // console.log(data);
+            setRepos(repos);
             setLoading(false);
           });
       } catch (error) {
@@ -122,7 +122,7 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
 
       <section id="noteworthy-projects" className="py-20 text-center">
         <h3 className="section-heading">Other Work</h3>
-        {loading ? "Loading..." : <MoreProjects starredRepositories={repos} />}
+        {loading ? "Loading..." : <MoreProjects pinnedItems={repos} />}
       </section>
     </div>
   );
