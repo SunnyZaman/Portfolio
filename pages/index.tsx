@@ -24,7 +24,7 @@ import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
 import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
 import { useEffect, useState } from "react";
-import { Octokit } from "octokit";
+import { Octokit } from "@octokit/rest";
 type Props = {
   pageInfo?: PageInfo;
   experiences?: Experience[];
@@ -111,16 +111,27 @@ Props) => {
         //   );
         // const res:any = await getRepos();
         // console.log("The res: ", data);
-        const response = await octokit.request("GET /search/issues", {
-          q: 'is:issue is:open',
-        });
-        const results = response.data.items.map((item: any) => ({
-          name: item.name,
-          owner: item.user.login,
-          url: item.html_url,
-        }));
-        // const starredRepos:any = data?.user?.starredRepositories?.edges;
-        console.log(results);
+
+        octokit.rest.repos
+  .listForOrg({
+    org: "octokit",
+    type: "public",
+  })
+  .then(({ data }) => {
+    // handle data
+    console.log(data);
+    
+  });
+        // const response = await octokit.request("GET /search/issues", {
+        //   q: 'is:issue is:open',
+        // });
+        // const results = response.data.items.map((item: any) => ({
+        //   name: item.name,
+        //   owner: item.user.login,
+        //   url: item.html_url,
+        // }));
+        // // const starredRepos:any = data?.user?.starredRepositories?.edges;
+        // console.log(results);
 
         // setRepos(starredRepos);
 
