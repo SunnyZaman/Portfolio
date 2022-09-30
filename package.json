@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.9",
     "@octokit/rest": "^19.0.4",
     "@portabletext/react": "^1.0.6",
     "@sanity/image-url": "^1.0.1",
@@ -17,7 +16,6 @@
     "graphql": "^16.6.0",
     "next": "12.3.1",
     "next-sanity": "^0.8.4",
-    "octokit": "^2.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-social-icons": "^5.14.0"

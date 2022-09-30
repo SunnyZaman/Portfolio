@@ -12,23 +12,13 @@ import { fetchExperiences } from "../utils/fetchExperiences";
 import { fetchSkills } from "../utils/fetchSkills";
 import { fetchProjects } from "../utils/fetchProjects";
 import { fetchSocials } from "../utils/fetchSocials";
-// import {
-//   ApolloClient,
-//   InMemoryCache,
-//   createHttpLink,
-//   gql,
-//   useQuery,
-// } from "@apollo/client";
-// import { setContext } from "@apollo/client/link/context";
 import MoreProjects from "../components/MoreProjects";
-import { fetchGitHubRepos } from "../utils/fetchGitHubRepos";
 import { useEffect, useState } from "react";
 import { Octokit } from "@octokit/rest";
-import { getApolloClient } from "../services/getApolloClient";
 type Props = {
-  pageInfo?: PageInfo;
-  experiences?: Experience[];
-  skills?: Skill[];
+  pageInfo: PageInfo;
+  experiences: Experience[];
+  skills: Skill[];
   projects: Project[];
   socials: Social[];
 };
