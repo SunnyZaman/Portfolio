@@ -50,8 +50,8 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
             user(login: "sunnyzaman") {
               pinnedItems(first: 3) {
                 edges {
-                  cursor
                   node {
+                    ... on Repository {
                     id
                     name
                     description
@@ -66,7 +66,8 @@ const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
               }
             }
           }
-          `
+        }
+        `
           )
           .then((data: any) => {
             // handle data
